@@ -1,0 +1,24 @@
+.guest-delete-btn {
+  float: right;
+}
+.guestTable td {
+  color: #404040;
+}
+body {
+  background-color: rgba(247, 209, 143, 0.32);
+}
+.guest-name {
+  color: #1b225f;
+  font-weight: bold;
+}
+.pretty h3 {
+  color: #1b225f;
+}
+.pretty label{
+  color: #808080;
+  font-weight: normal;
+}
+.pretty span{
+  color: rgb(63, 121, 168);
+  font-size: 12pt;
+}
