@@ -8,7 +8,7 @@
   "main": "app.js",
   "moduleType": [],
   "license": "MIT",
-  "homepage": "https://github.com/CSCI-E32/shuffling-pines",
+  "homepage": "https://github.com/joeb37/shuffling-pines",
   "private": true,
   "ignore": [
     "**/.*",

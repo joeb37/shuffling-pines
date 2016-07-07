@@ -24,10 +24,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CSCI-E32/shuffling-pines.git"
+    "url": "git+https://github.com/joeb37/shuffling-pines.git"
   },
   "bugs": {
-    "url": "https://github.com/CSCI-E32/shuffling-pines/issues"
+    "url": "https://github.com/joeb37/shuffling-pines/issues"
   },
-  "homepage": "https://github.com/CSCI-E32/shuffling-pines#readme"
+  "homepage": "https://github.com/joeb37/shuffling-pines#readme"
 }
