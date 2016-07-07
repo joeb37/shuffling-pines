@@ -1,97 +1,143 @@
 <!DOCTYPE html>
-<html ng-app="shuffling">
+<html>
 
   <head>
     <meta charset="utf-8" />
     <title>Shuffling Pines</title>
-    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="./styles.css" />
 
-    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="../bower_components/angular/angular.min.js"></script>
-
-    <script src="../src/app.js"></script>
+    <script src="./vendors.js"></script>
+    <script src="./application.js"></script>
   </head>
 
-  <body>
-    <h1>Shuffling Pines</h1>
-    <div class="row">
-      <div class="col-md-12">
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation" class="active"><a href="#form" aria-controls="form" role="tab" data-toggle="tab">Form</a></li>
-          <li role="presentation"><a href="#guests" aria-controls="guests" role="tab" data-toggle="tab">Guests</a></li>
-        </ul>
+  <body ng-app="shuffling" ng-cloak>
+    <div class="container" ng-controller="TabController as tab_vm">
+      <h1>Shuffling Pines</h1>
+      <h2>Guest Management Portal</h2>
+      <div class="row">
+        <div class="col-md-12">
+          <!-- Nav tabs -->
+          <ul class="nav nav-tabs">
+            <li ng-class="{active: tab_vm.checkTab(1)}" ng-click="tab_vm.setTab(1)"><a href="#">Form</a></li>
+            <li ng-class="{active: tab_vm.checkTab(2)}" ng-click="tab_vm.setTab(2)"><a href="#">Guests</a></li>
+          </ul>
 
-        <!-- Tab panes -->
-        <div class="tab-content">
-          <!-- Tab pane 1 -->
-          <div role="tabpanel" class="tab-pane active" id="form">
-            <div>
+          <!-- Tab panes -->
+          <div class="tab-content">
+            <!-- Tab pane 1 -->
+            <div ng-show="tab_vm.checkTab(1)" id="form" ng-controller="FormController as vm" >
 
-              <form class="col-md-6 well">
-                <div class="form-group">
-                  <label for="guest-name">Guest Name</label>
-                  <input type="text" class="form-control" id="guest-name" placeholder="">
-                </div>
-                <div class="form-group">
-                  <label for="transition-date">Transition Date</label>
-                  <input type="date" class="form-control" id="transition-date" placeholder="">
-                </div>
-                <div class="radio">
-                  <label>
-                    <input type="radio" name="pickup-dropoff" id="pickup" value="pickup" checked>
-                    Pick-up
-                  </label>
-                </div>
-                <div class="radio">
-                  <label>
-                    <input type="radio" name="pickup-dropoff" id="dropoff" value="dropoff">
-                    Drop-off
-                  </label>
-                </div>
-                <div class="form-group">
-                  <label for="location">Location</label>
-                  <textarea class="form-control" id="location"></textarea>
-                </div>
-                <button type="submit" class="btn">Submit</button>
-              </form>
+                <form class="col-md-6 well" ng-submit="vm.addGuest()" autocomplete="off">
+                  <div class="form-group">
+                    <label for="guest-name">Guest Name</label>
+                    <input type="text" required class="form-control" id="guest-name" ng-model="vm.name" placeholder="">
+                  </div>
+                  <div class="form-group">
+                    <label for="transition-date">Transition Date</label>
+                    <input type="date" required class="form-control" id="transition-date" ng-model="vm.transdate" placeholder="yyyy-mm-dd e.g. 2014-12-17">
+                  </div>
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="pickup-dropoff" id="pickup" ng-model="vm.status" value="pickup">
+                      Pick-up
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="pickup-dropoff" id="dropoff" ng-model="vm.status" value="dropoff">
+                      Drop-off
+                    </label>
+                  </div>
+                  <div ng-show="vm.showLocation()">
+                    <div class="form-group">
+                      <label for="location">Location</label>
+                      <textarea class="form-control" id="location" ng-model="vm.location"></textarea>
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
 
-              <!-- bound display -->
-              <div ng-show="false" class="col-md-6 well">
-                <div ng-show="false" class="form-group">
-                  <label>Name: </label>
-                  John Harvard
+                <!-- bound display -->
+              <div>
+                <div class="col-md-6 well pretty">
+                  <div class="form-group">
+                    <h3>{{vm.name}}</h3>
+                  </div>
+                  <div class="form-group">
+                    <label>Transition Date: </label>
+                    <span>{{vm.formattedDate()}}</span>
+                  </div>
+                  <div class="form-group">
+                    <label>Status: </label>
+                    <span>{{vm.status}}</span>
+                  </div>
+                  <div ng-show="vm.showLocation()" class="form-group">
+                    <label>Location: </label>
+                    <span>{{vm.location}}</span>
+                  </div>
                 </div>
-                <div ng-show="false" class="form-group">
-                  <label>Transition Date: </label>
-                  today!
-                </div>
-                <div ng-show="false" class="form-group">
-                  <label>Status: </label>
-                  drop-off
-                </div>
-                <div ng-show="false" class="form-group">
-                  <label>Location: </label>
-                  right here
+              </div>  <!-- bound display -->
+            </div> <!-- Tab 1 -->
+
+            <!-- Tab pane 2 -->
+            <div class="col-md-12 well" ng-controller="ListController as vm" ng-show="tab_vm.checkTab(2)" id="guests">
+              <table class="table guestTable">
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Transition Date</th>
+                    <th scope="col">Status</th>
+                    <th scope="col"></th>
+                    <th scope="col">Location</th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-class="{danger: vm.isMarkedForDeletion($index) === true}" ng-repeat="(index, guest) in vm.guests">
+                    <th scope="row" class="text-nowrap guest-name">{{guest.name}}</td>
+                    <td class="text-nowrap">{{vm.formatDate(guest.transdate)}}</td>
+                    <td class="text-nowrap">{{guest.status}}</td>
+                    <td>
+                      <button type="button" class="btn btn-xs btn-primary" ng-show="vm.showArrived(guest.status)" ng-click="vm.setArrived(index)">arrived</button>
+                      <button type="button" class="btn btn-xs btn-primary" ng-show="vm.showPickup(guest.status)" ng-click="vm.setPickup(index)">pickup</button>
+                    </td>
+                    <td>{{guest.location}}</td>
+                    <td>
+                      <button type="button" ng-show="vm.isMarkedForDeletion($index) === false" class="btn btn-default" title="Delete this guest" ng-click="vm.markForDelete($index)">Delete</button>
+                      <button type="button" ng-show="vm.isMarkedForDeletion($index) === true" class="btn btn-default" title="Undelete this guest" ng-click="vm.unmarkForDelete($index)">Restore</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <button type="button" data-toggle="modal" data-target="#confirmDelete" class="btn btn-danger" ng-show="vm.showConfirmButton()">Delete Selected Guests</button>
+              <button type="button" class="btn" ng-show="vm.showConfirmButton()" ng-click="vm.clearSelections()">Clear Selections</button>
+
+              <!-- Popup modal confirmation dialog -->
+              <div class="modal fade" id="confirmDelete">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">Confirm Delete</h4>
+                    </div>
+                    <div class="modal-body">
+                      <p>Remove Guest(s)?</p>
+                      <ul>
+                        <li ng-repeat="item in vm.toBeDeleted">{{vm.getName(item)}}</li>
+                      </ul>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                      <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="vm.deleteSelectedGuests()">Delete</button>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-            </div>
-          </div>
-
-          <!-- Tab pane 2 -->
-          <div role="tabpanel" class="tab-pane" id="guests">
-            <ul class="list-unstyled">
-              <li>
-
-              </li>
-            </ul>
-          </div>
-
+            </div> <!-- Tab 2 -->
+          </div> <!-- Tab panes -->
         </div>
       </div>
     </div>
-
   </body>
 </html>
